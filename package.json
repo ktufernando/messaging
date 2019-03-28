@@ -1,0 +1,23 @@
+{
+  "name": "newchat",
+  "version": "0.0.1",
+  "description": "poc de guest chat de purecloud",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js"
+  },
+  "author": "Fer Valdes",
+  "license": "ISC",
+  "dependencies": {
+    "events": "^3.0.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.20",
+    "mongoose-unique-validator": "^2.0.2",
+    "node-fetch": "^2.3.0",
+    "purecloud-guest-chat-client": "^4.0.0",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "websocket": "^1.0.28"
+  }
+}
