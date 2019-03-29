@@ -31,6 +31,14 @@ class Room {
 
     }
 
+    getAgent(){
+        return this.users.filter(u => u.systemId === process.env.PURECLOUD_AGENT)[0];
+    }
+
+    getClient(){
+        return this.users.filter(u => u.systemId !== process.env.PURECLOUD_AGENT)[0];
+    }
+
 
 }
 

@@ -56,7 +56,7 @@ const getStatusUser = async () => {
 
     console.log(usersStatus);
 
-    if(usersStatus.status === 'IDLE'){
+    if(usersStatus.status === 'IDLE' || usersStatus.status === 'INTERACTING'){
         return true;
     }else{
         return false;

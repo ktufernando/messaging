@@ -3,9 +3,10 @@ const Message = require('../model/message');
 const EventEmitter = require('events');
 const ee = new EventEmitter();
 
-const createMessage = (name, message) => {
+const createMessage = (id, name, message) => {
 
     return {
+        id,
         name,
         message,
         date: new Date().getTime()
@@ -27,8 +28,26 @@ const historyMessages = async (user) => {
     return messages;
 }
 
+const getClientSentMessages = async(user) => {
+
+    let agent = await User.findOne({systemId: process.env.PURECLOUD_AGENT});
+
+    return await Message.find({sender: user._id, receiver: agent._id, delivered: false});
+}
+
+const messageDelivered = async(message) => {
+    message.delivered = true;
+    message.save();
+    console.log('********************** mark as delivered');
+    ee.emit('message-delivered', message);
+}
+
+
+
 module.exports = {
     createMessage,
     historyMessages,
+    getClientSentMessages,
+    messageDelivered,
     ee
 }

@@ -1,12 +1,7 @@
-const WebSocketClient = require('websocket').client;
 const { ee } = require('./service/service');
 const { getStatusUser } = require('./purecloud/agent');
 const { webChatGuestConversation } = require('./purecloud/socket-client');
 const ioclient = require('socket.io-client');
-
-
-let localSocket = new WebSocketClient();
-
 
 const onMessage = (message) =>{
     

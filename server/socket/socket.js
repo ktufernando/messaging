@@ -5,8 +5,10 @@ const service = require('../service/service');
 const { ee } = require('../service/service');
 const { Room } = require('../service/room');
 const room = new Room();
+let cli;
 
 io.on('connection', (client) => {
+    cli = client;
 
     console.log(`client connected: ${client.toString()}`);
 
@@ -33,16 +35,12 @@ io.on('connection', (client) => {
         const users = room.getUsers();
 
         service.historyMessages(user).then(messages => {
-            console.log(messages);
             client.emit('historyMessages', messages);
         });
 
+        
         client.emit('roomStatus', users);
         
-        //client.broadcast.emit('sendMenssage', service.createMessage('Administrador', `${ user.name } se unió`));
-
-        //callback(users);
-
         ee.emit('client-connected', user);
 
     });
@@ -69,7 +67,6 @@ io.on('connection', (client) => {
         const users = room.getUsers();
 
         client.broadcast.emit('roomStatus', users);
-        //client.broadcast.emit('sendMenssage', service.createMessage('Administrador', `${ user.name } se unió`));
 
         ee.emit('agent-connected', user);
 
@@ -83,8 +80,9 @@ io.on('connection', (client) => {
             message: data.message
         });
         await message.save();
-        let mensaje = service.createMessage(data.sender.name, data.message);
+        let mensaje = service.createMessage(message._id, data.sender.name, data.message);
         client.broadcast.emit('sendMessage', mensaje);
+        ee.emit('client-message-in', message);
 
         callback(mensaje);
     });
@@ -112,26 +110,52 @@ io.on('connection', (client) => {
 
     
 
-    ee.on('agent-message-in', (message) => {
     
-        // persistir mensaje
-
-
-        client.broadcast.emit('sendMenssage', service.createMessage('Agente', message));
-
-    });
-
-    ee.on('connect-agent', () => {
-    
-        // persistir mensaje
-
-
-        client.broadcast.emit('loginAgent');
-
-    });
 
 
 });
+
+ee.on('agent-message-in', (message) => {
+    console.log(`on agent message in: ${message}`);
+    if(!message){
+        return;
+    }
+    const agent = room.getAgent();
+    const c = room.getClient();
+    let m = new Message({
+        sender: agent._id,
+        receiver: room.getClient()._id,
+        message
+    });
+    let mensaje = service.createMessage(m._id, agent.name, message);
+    cli.broadcast.emit('sendMessage', mensaje);
+    m.save();
+
+});
+
+ee.on('connect-agent', () => {
+    cli.broadcast.emit('loginAgent');
+});
+
+ee.on('purecloud-connected', () => {
+    let agent = room.getAgent();
+    if(!agent.online){
+        agent.lastConnection = new Date();
+        agent.online = true;
+        agent.save();
+    }
+
+    cli.broadcast.emit('roomStatus', room.getUsers());
+});
+
+ee.on('message-delivered', (message) => {
+
+    console.log('*************** message delivered event');
+    cli.broadcast.emit('messageDelivered', message);
+
+});
+
+
 
 
 

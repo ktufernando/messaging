@@ -10,6 +10,24 @@ var formEnviar = $('#formEnviar');
 var txtMensaje = $('#txtMensaje');
 var divChatbox = $('#divChatbox');
 
+function cambiarEstadoMensaje(mensaje) {
+    var divMensaje = $('#'+mensaje._id);
+
+    var fecha = new Date(mensaje.date);
+    var hora = fecha.getHours() + ':' + fecha.getMinutes();
+
+    var html = '    <div class="chat-content">';
+    html += '        <h5>' + mensaje.name + '</h5>';
+    html += '        <div class="box bg-light-inverse">' + mensaje.message + '&nbsp;&nbsp;<img src="assets/images/tick.png" alt="sent" style="height:1em" /><img src="assets/images/tick.png" alt="delivered" style="height:1em" /></div>';
+    html += '    </div>';
+    html += '    <div class="chat-img"><img src="assets/images/users/5.jpg" alt="user" /></div>';
+    html += '    <div class="chat-time">' + hora + '</div></div>';
+    html += '</li>';
+
+    divMensaje.html(html);
+
+}
+
 
 // Funciones para renderizar usuarios
 function renderizarUsuarios(users) { // [{},{},{}]
@@ -50,17 +68,14 @@ function renderizarMensajes(mensaje, yo) {
     }
 
     if (yo) {
-        html += '<li class="reverse">';
+        html += '<li class="reverse" id="'+ mensaje.id +'">';
         html += '    <div class="chat-content">';
         html += '        <h5>' + mensaje.name + '</h5>';
-        if(mensaje.sent && !mensaje.delivered){
+        if(!mensaje.delivered){
             html += '        <div class="box bg-light-inverse">' + mensaje.message + '&nbsp;&nbsp;<img src="assets/images/tick.png" alt="sent" style="height:1em"/></div>';
         }
         if(mensaje.delivered){
             html += '        <div class="box bg-light-inverse">' + mensaje.message + '&nbsp;&nbsp;<img src="assets/images/tick.png" alt="sent" style="height:1em" /><img src="assets/images/tick.png" alt="delivered" style="height:1em" /></div>';
-        }
-        if(!mensaje.sent && !mensaje.delivered){
-            html += '        <div class="box bg-light-inverse">' + mensaje.message + '</div>';
         }
         html += '    </div>';
         html += '    <div class="chat-img"><img src="assets/images/users/5.jpg" alt="user" /></div>';

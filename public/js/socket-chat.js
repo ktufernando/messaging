@@ -51,13 +51,14 @@ socket.on('historyMessages', function(mensajes) {
     allMessages.forEach(e => {
         renderizarMensajes(
             {
-                name:  e.sender.id === myself.id? myself.name : you.name, 
+                name:  e.sender === myself._id? myself.name : you.name, 
                 message: e.message, 
                 date: e.date,
                 sent: e.sent,
-                delivered: e.delivered
+                delivered: e.delivered,
+                id: e._id
             }, 
-            e.sender.id === myself.id);
+            e.sender === myself._id);
         scrollBottom();
     });
 
@@ -96,5 +97,10 @@ socket.on('mensajePrivado', function(mensaje) {
 
     console.log('Mensaje Privado:', mensaje);
 
+});
+
+// Escuchar información
+socket.on('messageDelivered', function(mensaje) {
+    cambiarEstadoMensaje(mensaje);
 });
 
