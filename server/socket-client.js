@@ -22,7 +22,7 @@ const onMessage = (message) =>{
 ee.on('socket-server-online', ()=>{
     console.log('Local - Socket - localSocketConnection');
    
-    const socket = ioclient.connect('http://127.0.0.1:3000', {secure: false, resource: "/socket.io"});
+    const socket = ioclient.connect('https://messaging-purecloud.herokuapp.com', {resource: "/socket.io"});
     socket.on('connect', () => {
         console.log(`socket io client connected - local: ${socket.id}`);
         ee.emit('local-connected');
