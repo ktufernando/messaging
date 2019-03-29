@@ -15,11 +15,11 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // ============================
 let urlDB;
 
-if (process.env.NODE_ENV === 'dev') {
+//if (process.env.NODE_ENV === 'dev') {
     urlDB = 'mongodb+srv://pepeargento:iG0VO3m8EabWXwO1@cluster0-8e8qa.mongodb.net/messaging?retryWrites=true';
-} else {
-    urlDB = process.env.MONGO_URI;
-}
+//} else {
+//    urlDB = process.env.MONGO_URI;
+//}
 process.env.URLDB = urlDB;
 
 
