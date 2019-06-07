@@ -28,4 +28,4 @@ npm install
 node server/server
 ```
 
-![alt text](https://drive.google.com/file/d/1t5lZYw91d6uI6ryBQcCdSv5K3DPXJ8_C/view?usp=sharing)
+<img src="https://raw.githubusercontent.com/ktufernando/messaging/master/diagrams/Deploy%20diagram%20-%20Node1.jpg" />
